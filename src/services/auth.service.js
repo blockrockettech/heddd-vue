@@ -1,5 +1,5 @@
 import axios from 'axios';
-import {authHeader} from "./auth.header";
+import TokenUtils from "./token.utils";
 
 export default class AuthService {
 
@@ -7,12 +7,19 @@ export default class AuthService {
         this.apiRoot = apiRoot;
     }
 
-    getAll() {
+    getUser() {
         return axios
-            .get(`${this.apiRoot}/users`, {
-                headers: authHeader()
-            })
-            .then(this._handleResponse);
+            .get(`${this.apiRoot}/auth/user`)
+            .then((response) => {
+                console.log("_onSuccess()", response.data);
+                const user = response.data;
+
+                // login successful if there's a jwt token in the response
+                if (user.token) {
+                    TokenUtils.setToken(user);
+                }
+                return user;
+            });
     }
 
     login(username, password) {
@@ -27,43 +34,21 @@ export default class AuthService {
         };
 
         return axios.post(`${this.apiRoot}/auth/login`, payload, config)
-            .catch((error) => {
-
-                // Check if 401 then auto logout
-                if (error.response.status === 401) {
-                    this.logout();
-                    location.reload();
-                }
-
-                // reject promise
-                const failure = (error.response && error.response.data.message) || error.response.statusText;
-                return Promise.reject(failure);
-            })
             .then((response) => {
-                const data = response.data;
+                console.log("_onSuccess()", response.data);
+                const user = response.data;
 
-                // If not valid
-                if (response.status !== 200) {
-                    const error = (data && data.message) || response.statusText;
-                    return Promise.reject(error);
-                }
-
-                return Promise.resolve(data);
-            })
-            .then(user => {
                 // login successful if there's a jwt token in the response
                 if (user.token) {
-                    // store user details and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('user', JSON.stringify(user));
+                    TokenUtils.setToken(user);
                 }
-
                 return user;
             });
     }
 
     logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('user');
+        console.log("log out user");
+        TokenUtils.clearToken();
     }
 
 }

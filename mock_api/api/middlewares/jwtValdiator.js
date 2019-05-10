@@ -9,7 +9,7 @@ const validateJwtToken = (req, res, next) => {
     let token = req.headers['x-access-token'] || req.headers['authorization'];
 
     // Remove Bearer from string
-    if (token.startsWith('Bearer ')) {
+    if (token && token.startsWith('Bearer ')) {
         token = token.slice(7, token.length);
     }
 
@@ -19,20 +19,24 @@ const validateJwtToken = (req, res, next) => {
 
         jwt.verify(token, SUPER_SECRET_KEY, (err, decoded) => {
             if (err) {
-                return res.json({
-                    success: false,
-                    message: 'Token invalid, please try again'
-                });
+                return res
+                    .status(401)
+                    .json({
+                        success: false,
+                        message: 'Token invalid, please try again'
+                    });
             } else {
                 req.decoded = decoded;
                 next();
             }
         });
     } else {
-        return res.json({
-            success: false,
-            message: 'Token not found on request'
-        });
+        return res
+            .status(403)
+            .json({
+                success: false,
+                message: 'Token not found on request'
+            });
     }
 };
 

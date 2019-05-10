@@ -2,7 +2,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import {authentication} from './authentication';
-import {users} from './users';
 
 import HeddService from '../services/hedd.service';
 import AuthService from "../services/auth.service";
@@ -15,8 +14,7 @@ export default new Vuex.Store({
 
     // Add different modules to the store, these will be name space by name e.g. `users.user`
     modules: {
-        authentication,
-        users
+        authentication
     },
     state: {
         guid: null,

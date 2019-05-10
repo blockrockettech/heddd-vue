@@ -1,8 +1,9 @@
 <template>
     <div id="app" class="container">
         <nav class="navbar navbar-expand-lg">
-            <a class="navbar-brand" href="#">  <img alt="HEDD" src="./assets/prospects-hedd-logo.svg"/></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="#"> <img alt="HEDD" src="./assets/prospects-hedd-logo.svg"/></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -18,11 +19,39 @@
                     </li>
                 </ul>
             </div>
+            <div>
+                <strong v-if="isLoggedIn" class="text-success">
+                    Logged In woop woop {{userExtra.name}} {{userExtra.role}}
+                </strong>
+                <strong v-if="!isLoggedIn" class="text-danger">
+                    Computer says no!
+                </strong>
+            </div>
         </nav>
 
         <router-view/>
     </div>
 </template>
+
+<script>
+    export default {
+        computed: {
+            user() {
+                return this.$store.state.authentication.user;
+            },
+            userExtra() {
+                return this.$store.state.authentication.user.extra;
+            },
+            isLoggedIn() {
+                return this.$store.state.authentication.status.loggedIn;
+            },
+        },
+        created() {
+            // Try and get the user on application load
+            this.$store.dispatch('authentication/getUser');
+        }
+    };
+</script>
 
 <style lang="scss">
     $primary: #AF0075;

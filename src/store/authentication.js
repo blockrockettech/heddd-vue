@@ -10,6 +10,18 @@ export const authentication = {
     namespaced: true,
     state: initialState,
     actions: {
+        getUser({commit, rootState}) {
+            rootState.authService.getUser()
+                .then(
+                    user => {
+                        commit('loginSuccess', user);
+                        router.push('/');
+                    },
+                    error => {
+                        commit('loginFailure', error);
+                    }
+                );
+        },
         login({dispatch, commit, rootState}, {username, password, redirect}) {
             commit('loginRequest', {username});
 
@@ -21,7 +33,6 @@ export const authentication = {
                     },
                     error => {
                         commit('loginFailure', error);
-                        // dispatch('alert/error', error, {root: true});
                     }
                 );
         },

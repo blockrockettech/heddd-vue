@@ -12,11 +12,7 @@ export default class HeddService {
 
         const payload = HeddService.buildPayload(data);
 
-        return axios.post(`${this.apiRoot}/enquire/verify`, payload, {
-            headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
-        })
+        return axios.post(`${this.apiRoot}/enquire/verify`, payload)
             .then((response) => {
                 return response.data;
             });
@@ -25,11 +21,7 @@ export default class HeddService {
     async queryEnquiry(uuid) {
         console.log(`Query Enquiry for ${uuid}`);
 
-        return axios.get(`${this.apiRoot}/enquire/${uuid}`, {
-            headers: {
-                'Access-Control-Allow-Origin': '*'
-            }
-        })
+        return axios.get(`${this.apiRoot}/enquire/${uuid}`)
             .then((response) => {
                 return response.data;
             });

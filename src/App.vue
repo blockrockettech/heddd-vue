@@ -21,7 +21,7 @@
             </div>
             <div>
                 <strong v-if="isLoggedIn" class="text-success">
-                    Logged In woop woop {{userExtra.name}} {{userExtra.role}}
+                    Logged In woop woop {{this.user.username}} {{this.user.role}}
                 </strong>
                 <strong v-if="!isLoggedIn" class="text-danger">
                     Computer says no!
@@ -38,9 +38,6 @@
         computed: {
             user() {
                 return this.$store.state.authentication.user;
-            },
-            userExtra() {
-                return this.$store.state.authentication.user.extra;
             },
             isLoggedIn() {
                 return this.$store.state.authentication.status.loggedIn;

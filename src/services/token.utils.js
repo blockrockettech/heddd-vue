@@ -1,3 +1,5 @@
+const jwtDecode = require('jwt-decode');
+
 const clearToken = () => {
     console.log("Clearing user token");
     // remove user from local storage to log user out
@@ -10,7 +12,26 @@ const setToken = (user) => {
     localStorage.setItem('user', JSON.stringify(user));
 };
 
+
+const getToken = () => {
+
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log("user", user);
+
+    if (user) {
+        console.log(jwtDecode(user.token));
+        return {
+            ...user,
+            ...jwtDecode(user.token)
+        }
+    }
+
+    return user;
+};
+
+
 export default {
     clearToken,
     setToken,
+    getToken,
 };

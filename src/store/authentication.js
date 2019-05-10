@@ -1,6 +1,7 @@
 import router from '../router';
+import TokenUtils from "../services/token.utils";
 
-const user = JSON.parse(localStorage.getItem('user'));
+const user = TokenUtils.getToken();
 
 const initialState = user
     ? {status: {loggedIn: true}, user}

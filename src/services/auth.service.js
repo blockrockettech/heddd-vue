@@ -18,7 +18,7 @@ export default class AuthService {
                 if (user.token) {
                     TokenUtils.setToken(user);
                 }
-                return user;
+                return TokenUtils.getToken();
             });
     }
 
@@ -42,7 +42,7 @@ export default class AuthService {
                 if (user.token) {
                     TokenUtils.setToken(user);
                 }
-                return user;
+                return TokenUtils.getToken();
             });
     }
 

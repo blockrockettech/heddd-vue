@@ -38,3 +38,13 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 ```
 npm run mockapi
 ``` 
+
+## Docker
+
+### Make image
+
+`docker build -t hedd/hedd-vue-app .`
+
+### Run latest image on localhost:8080
+
+`docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 hedd/hedd-vue-app`

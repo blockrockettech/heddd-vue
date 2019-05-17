@@ -1,0 +1,110 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: Enquire API
+  description: Some detailed description about this awesome service which we are providing to the world
+servers:
+  - url: https://api.public.heed
+paths:
+  /verify:
+    post:
+      summary: Verify a new Enquiry
+      requestBody:
+        content:
+          application/json:
+            schema:  # Request body contents
+              type: object
+              properties:
+                enquiry-type:
+                  type: string
+                first-names:
+                  type: string
+                last-name:
+                  type: string
+                date-of-birth:
+                  type: string
+                year-of-award:
+                  type: integer
+                course-name:
+                  type: string
+                qualification-type:
+                  type: string
+                classification:
+                  type: string
+
+                # institution type
+                institution:
+                  type: object
+                  $ref: '#/components/schemas/Institution'
+
+                # documents type
+                documents:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    $ref: '#/components/schemas/Document'
+
+                # TODO example
+
+              required:
+                - enquiry-type
+                - first-names
+                - last-name
+                - date-of-birth
+                - year-of-award
+                - course-name
+                - qualification-type
+                - classification
+                - institution
+                - documents
+      responses:
+        '202':
+          description: Submitted
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: "#/components/schemas/SubmittedEnquiry"
+        '401':
+          description: Token invalid, please try again
+        '403':
+          description: Token not found on request
+        default:
+          description: Unexpected error
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "consent.pdf"
+        type:
+          type: string
+          example: "consent-form"
+        content:
+          type: string
+          example: "a base 64 encoded PDF"
+        format:
+          type: string
+          example: "pdf"
+      required:
+        - name
+        - type
+        - content
+        - format
+    Institution:
+      type: object
+      properties:
+        id:
+          type: integer
+
+    SubmittedEnquiry:
+      type: object
+      properties:
+        enquiry-status:
+          type: string
+        enquiry-guid:
+          type: string
+          format: uuid

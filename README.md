@@ -50,6 +50,6 @@ https://jonathanmh.com/deploying-a-vue-js-single-page-app-including-router-with-
 
 ### Run latest image on localhost:8080
 
-`docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 hedd/hedd-vue-app-ngnix`
+`docker run -p 8080:80 hedd/hedd-vue-app-ngnix`
 
 

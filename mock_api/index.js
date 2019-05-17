@@ -1,6 +1,7 @@
+const swaggerUi = require('swagger-ui-express');
 const express = require('express');
 const cors = require('cors');
-
+const YAML = require('yamljs');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -18,6 +19,8 @@ app.use('/enquire', validateJwtToken, enquire);
 
 // Auth does not require JWT validation
 app.use('/auth', auth);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(YAML.load('./mock_api/swagger.yaml')));
 
 const port = process.env.PORT || 3000;
 

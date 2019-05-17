@@ -41,10 +41,15 @@ npm run mockapi
 
 ## Docker
 
+Based on:
+https://jonathanmh.com/deploying-a-vue-js-single-page-app-including-router-with-docker/
+
 ### Make image
 
-`docker build -t hedd/hedd-vue-app .`
+`docker build -t hedd/hedd-vue-app-ngnix .`
 
 ### Run latest image on localhost:8080
 
-`docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 hedd/hedd-vue-app`
+`docker run -it -p 8080:8080 --rm --name dockerize-vuejs-app-1 hedd/hedd-vue-app-ngnix`
+
+

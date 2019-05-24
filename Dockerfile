@@ -1,17 +1,8 @@
 # Create the container from the alpine linux image
-FROM alpine:3.7
-
-# Add nginx and nodejs
-RUN apk add --update nginx nodejs
+FROM node:lts-alpine
 
 # Create the directories we will need
 RUN mkdir -p /tmp/nginx/hedd-vue-spa-nginx
-RUN mkdir -p /var/log/nginx
-RUN mkdir -p /var/www/html
-
-# Copy the respective nginx configuration files
-COPY nginx_config/nginx.conf /etc/nginx/nginx.conf
-COPY nginx_config/default.conf /etc/nginx/conf.d/default.conf
 
 # Set the directory we want to run the next commands for
 WORKDIR /tmp/nginx/hedd-vue-spa-nginx
@@ -26,11 +17,20 @@ RUN npm rebuild node-sass
 # run webpack and the vue-loader
 RUN npm run build
 
+FROM nginx:stable-alpine-perl
+
+RUN mkdir -p /var/log/nginx
+RUN mkdir -p /var/www/html
+
 # copy the built app to our served directory
-RUN cp -r dist/* /var/www/html
+COPY --from=0 /tmp/nginx/hedd-vue-spa-nginx/dist/ /var/www/html
+
+# Copy the respective nginx configuration files
+COPY nginx_config/nginx.conf /etc/nginx/nginx.conf
+COPY nginx_config/default.conf /etc/nginx/conf.d/default.conf
 
 # make all files belong to the nginx user
 RUN chown nginx:nginx /var/www/html
 
 # start nginx and keep the process from backgrounding and the container from quitting
-CMD ["nginx", "-g", "daemon off;"]
+CMD sed -i.bak s/DOCKER_PORT/$PORT/g /etc/nginx/nginx.conf && nginx -g "daemon off;"
